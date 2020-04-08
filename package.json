@@ -2,7 +2,7 @@
   "name": "y",
   "version": "0.1.0",
   "description": "React components to build a circular mind map",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
     "build": "webpack --mode production"
   },
