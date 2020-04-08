@@ -1,4 +1,8 @@
 module.exports = {
+  output: {
+    library: 'circular-mind-map-react',
+    libraryTarget: 'umd',
+  },
   module: {
     rules: [
       {
