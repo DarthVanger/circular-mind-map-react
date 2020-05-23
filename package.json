@@ -1,5 +1,5 @@
 {
-  "name": "y",
+  "name": "circular-mind-map-react",
   "version": "0.1.2",
   "description": "React components to build a circular mind map",
   "main": "dist/main.js",
