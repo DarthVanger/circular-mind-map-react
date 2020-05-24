@@ -3,8 +3,14 @@
   "version": "0.1.2",
   "description": "React components to build a circular mind map",
   "main": "dist/main.js",
+  "watch": {
+    "link": "src/**/*"
+  },
   "scripts": {
-    "build": "webpack --mode production"
+    "link": "npm link",
+    "build": "webpack --mode production",
+    "prepublish": "npm run build",
+    "watch": "npm-watch"
   },
   "author": "darthvanger@gmail.com",
   "license": "MIT",
@@ -19,6 +25,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "npm-watch": "^0.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
