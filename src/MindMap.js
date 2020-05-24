@@ -73,7 +73,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   mindMapNodes.push(React.cloneElement(nodes[0], {x: center, y: center}));
   renderLevel(nodes[0]);
 
-  const svgSize = getCirlceRadius(circleNum + 1) * 2;
+  const svgSize = getCirlceRadius(circleNum + 1) * 2 + center;
   return (
     <svg
       viewBox={`0 0 ${svgSize} ${svgSize}`}
