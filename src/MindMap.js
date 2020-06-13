@@ -55,11 +55,10 @@ const MindMap = ({nodes, edges, ...attrs }) => {
         const x = center + r * Math.cos(φ)
         nodePositions.push({ id: n.props.id, x, y, φ });
         mindMapNodes.push(<circle r={r} cx={center} cy={center} fill="none" stroke="#ddd" strokeWidth="1" strokeDasharray="4" />);
-        console.log('parentPosition: ', parentPosition);
         const path = <path d={`
-          M ${parentPosition?.x || c} ${parentPosition?.y || c}
-          L ${firstNodePosition?.x || x } ${firstNodePosition?.y || y}
-          Q ${firstNodePosition?.x + 10 || x } ${firstNodePosition?.y + 30 || y } ${x} ${y}`}
+            M ${parentPosition?.x || c} ${parentPosition?.y || c}
+            L ${x} ${y}
+          `}
           stroke={`rgb(${circleNum*50 % 255}, ${circleNum*100*3.14 % 255}, ${circleNum*150 % 255})`}
           strokeWidth="2" fill="none"
         />;
