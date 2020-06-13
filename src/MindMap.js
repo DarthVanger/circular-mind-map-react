@@ -24,18 +24,25 @@ const MindMap = ({nodes, edges, ...attrs }) => {
 
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
+
+    const parent = nodes.find(n => n.id === edges.find(e => e.props.to === node.props.id)?.from);
+    const parentPosition = nodePositions.find(p => p.id == parent.props.id);
+
     const levelNodes = edges
       .filter(e => e.props.from === node.props.id)
       .map(e => nodes.find(n => e.props.to === n.props.id));
 
-    if (levelNodes.length) {
-      circleNum++;
+    let firstNodePosition;
+    if (!levelNodes.length) {
+      console.log(`rendering "${node.props.label}", which has no children`);
+      console.log(`node parent is: "${parent.props.label}"`);
+      console.log(`parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
+      return;
     }
 
-    const parent = node;
-    const parentPosition = nodePositions.find(p => p.id == parent.props.id);
-
-    let firstNodePosition;
+    console.log(`rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
+    console.log(`node parent is: "${parent.props.label}"`);
+    circleNum++;
     const levelNodeElements = levelNodes
       .map((n, i) => {
         const r = getCirlceRadius(circleNum);
@@ -48,6 +55,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
         const x = center + r * Math.cos(φ)
         nodePositions.push({ id: n.props.id, x, y, φ });
         mindMapNodes.push(<circle r={r} cx={center} cy={center} fill="none" stroke="#ddd" strokeWidth="1" strokeDasharray="4" />);
+        console.log('parentPosition: ', parentPosition);
         const path = <path d={`
           M ${parentPosition?.x || c} ${parentPosition?.y || c}
           L ${firstNodePosition?.x || x } ${firstNodePosition?.y || y}
@@ -71,6 +79,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   }
 
   mindMapNodes.push(React.cloneElement(nodes[0], {x: center, y: center}));
+  nodePositions.push({ id: nodes[0].props.id, x: center, y: center, φ: 0 });
   renderLevel(nodes[0]);
 
   const svgSize = getCirlceRadius(circleNum + 1) * 2 + center;
