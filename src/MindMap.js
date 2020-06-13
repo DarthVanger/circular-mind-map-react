@@ -25,23 +25,28 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
 
-    const parent = nodes.find(n => n.id === edges.find(e => e.props.to === node.props.id)?.from);
+    const parent = node === nodes[0] ?
+      nodes[0]
+      :
+      nodes.find(n => n.props.id === edges.find(e => e.props.to === node.props.id)?.props.from);
+
     const parentPosition = nodePositions.find(p => p.id == parent.props.id);
 
     const levelNodes = edges
       .filter(e => e.props.from === node.props.id)
       .map(e => nodes.find(n => e.props.to === n.props.id));
 
+    console.log(`Rendering node "${node.props.label}"`);
+    console.log(`- parent: "${parent.props.label}"`);
+    console.log(`- parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
+    console.log(`- children: [${levelNodes?.map(l => l.props.label).join(',')}]`);
+
     let firstNodePosition;
     if (!levelNodes.length) {
-      console.log(`rendering "${node.props.label}", which has no children`);
-      console.log(`node parent is: "${parent.props.label}"`);
-      console.log(`parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
       return;
     }
 
-    console.log(`rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
-    console.log(`node parent is: "${parent.props.label}"`);
+    console.log(`Rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
     circleNum++;
     const levelNodeElements = levelNodes
       .map((n, i) => {
