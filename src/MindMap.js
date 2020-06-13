@@ -25,24 +25,13 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
 
-    const parent = node === nodes[0] ?
-      nodes[0]
-      :
-      nodes.find(n => n.props.id === edges.find(e => e.props.to === node.props.id)?.props.from);
-
-    const parentPosition = nodePositions.find(p => p.id == parent.props.id);
-
     const levelNodes = edges
       .filter(e => e.props.from === node.props.id)
       .map(e => nodes.find(n => e.props.to === n.props.id));
 
-    console.log(`Rendering node "${node.props.label}"`);
-    console.log(`- parent: "${parent.props.label}"`);
-    console.log(`- parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
-    console.log(`- children: [${levelNodes?.map(l => l.props.label).join(',')}]`);
-
     let firstNodePosition;
     if (!levelNodes.length) {
+      console.log(`Node "${node.props.label}" has no children`);
       return;
     }
 
@@ -50,11 +39,21 @@ const MindMap = ({nodes, edges, ...attrs }) => {
     circleNum++;
     const levelNodeElements = levelNodes
       .map((n, i) => {
+        const parent = nodes.find(n1 => n1.props.id === edges.find(e => e.props.to === n.props.id)?.props.from);
+
+        const parentPosition = nodePositions.find(p => p.id == parent.props.id);
+
         const r = getCirlceRadius(circleNum);
         let φ = (i + nodesRenderedOnThisCircle) * 3.14 / 4 + (parentPosition?.φ || 0);
         if (parentPosition?.φ) {
-          φ += 3.14 / Math.pow(circleNum + 1, 2);
+          //φ += 3.14 / Math.pow(circleNum + 1, 2);
         }
+
+
+        console.log(`Rendering node: "${n.props.label}"`);
+        console.log(`- parent: "${parent.props.label}"`);
+        console.log(`- parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
+
         const c = center;
         const y = center + r * Math.sin(φ);
         const x = center + r * Math.cos(φ)
@@ -67,6 +66,8 @@ const MindMap = ({nodes, edges, ...attrs }) => {
           stroke={`rgb(${circleNum*50 % 255}, ${circleNum*100*3.14 % 255}, ${circleNum*150 % 255})`}
           strokeWidth="2" fill="none"
         />;
+
+        console.log(`- nodePositiong: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
 
         edgeElements.push(path);
         if (i == 0) {
