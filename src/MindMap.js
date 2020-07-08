@@ -18,11 +18,16 @@ const getCirlceRadius = (circleNum) => {
 }
 
 const MindMap = ({nodes, edges, ...attrs }) => {
-  let circleNum = 0;
+  let circleNum = 1;
   let mindMapNodes = [];
   const edgeElements = [];
   const nodePositions = [];
   const slots = [];
+  let shift = 3.14 / 4 / circleNum;
+
+  slots[circleNum] = new Array(Math.floor(2 * 3.14 / shift)).fill(false);
+  let slotNum = 0;
+  let r = getCirlceRadius(circleNum);
 
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
@@ -39,13 +44,25 @@ const MindMap = ({nodes, edges, ...attrs }) => {
 
     console.debug(`Rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
 
-    circleNum++;
-    const shift = 3.14 / 4 / circleNum;
-    const r = getCirlceRadius(circleNum);
-    slots[circleNum] = new Array(Math.floor(2 * 3.14 / shift));
-    console.log('slots: ', slots);
     const levelNodeElements = levelNodes
       .map((n, i) => {
+        console.log('0-slots:', slots);
+        console.log('stuff', slots[circleNum].filter(s => !s).length);
+        if (slots[circleNum].filter(s => !s).length === 0) {
+          console.log('here');
+          circleNum++;
+          slots[circleNum] = new Array(Math.floor(2 * 3.14 / shift)).fill(false);
+          slotNum = 0;
+          r = getCirlceRadius(circleNum);
+          shift = 3.14 / 4 / circleNum;
+          console.log('1- slots: ', slots);
+        } else {
+          slots[circleNum][slotNum] = true;
+          slotNum++;
+        }
+
+        console.log('circleNum: ', circleNum);
+
         const parent = nodes.find(n1 => n1.props.id === edges.find(e => e.props.to === n.props.id)?.props.from);
 
         const parentPosition = nodePositions.find(p => p.id == parent.props.id);
