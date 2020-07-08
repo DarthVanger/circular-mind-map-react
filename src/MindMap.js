@@ -10,7 +10,7 @@ export const Node = ({x, y, label, ...attrs }) => (
   </g>
 );
 
-const center = 500;
+const center = 0;
 
 const getCirlceRadius = (circleNum) => {
   return circleNum * 250;
@@ -67,7 +67,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
           strokeWidth="2" fill="none"
         />;
 
-        console.log(`- nodePositiong: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
+        console.debug(`- nodePositiong: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
 
         edgeElements.push(path);
         if (i == 0) {
@@ -90,7 +90,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   const svgSize = getCirlceRadius(circleNum + 1) * 2 + center;
   return (
     <svg
-      viewBox={`0 0 ${svgSize} ${svgSize}`}
+      viewBox={`${-svgSize/2} ${-svgSize/2} ${svgSize} ${svgSize}`}
       width={svgSize}
       height={svgSize}
       {...attrs}
