@@ -13,7 +13,7 @@ export const Node = ({x, y, label, ...attrs }) => (
 const center = 500;
 
 const getCirlceRadius = (circleNum) => {
-  return circleNum * 150;
+  return circleNum * 250;
 }
 
 const MindMap = ({nodes, edges, ...attrs }) => {
