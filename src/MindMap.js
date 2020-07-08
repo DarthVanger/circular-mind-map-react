@@ -13,6 +13,7 @@ export const Node = ({x, y, label, ...attrs }) => (
 const center = 0;
 
 const getCirlceRadius = (circleNum) => {
+  if (circleNum < 0) return 0;
   return circleNum * 250;
 }
 
@@ -21,6 +22,7 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   let mindMapNodes = [];
   const edgeElements = [];
   const nodePositions = [];
+  const slots = [];
 
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
@@ -31,28 +33,32 @@ const MindMap = ({nodes, edges, ...attrs }) => {
 
     let firstNodePosition;
     if (!levelNodes.length) {
-      console.log(`Node "${node.props.label}" has no children`);
+      console.debug(`Node "${node.props.label}" has no children`);
       return;
     }
 
-    console.log(`Rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
+    console.debug(`Rendering level for "${node.props.label}". Level nodes: [${levelNodes.map(l => l.props.label).join(',')}]`);
+
     circleNum++;
+    const shift = 3.14 / 4 / circleNum;
+    const r = getCirlceRadius(circleNum);
+    slots[circleNum] = new Array(Math.floor(2 * 3.14 / shift));
+    console.log('slots: ', slots);
     const levelNodeElements = levelNodes
       .map((n, i) => {
         const parent = nodes.find(n1 => n1.props.id === edges.find(e => e.props.to === n.props.id)?.props.from);
 
         const parentPosition = nodePositions.find(p => p.id == parent.props.id);
 
-        const r = getCirlceRadius(circleNum);
-        let φ = (i + nodesRenderedOnThisCircle) * 3.14 / 4 + (parentPosition?.φ || 0);
+        let φ = (i + nodesRenderedOnThisCircle) * shift + (parentPosition?.φ || 0);
         if (parentPosition?.φ) {
           //φ += 3.14 / Math.pow(circleNum + 1, 2);
         }
 
 
-        console.log(`Rendering node: "${n.props.label}"`);
-        console.log(`- parent: "${parent.props.label}"`);
-        console.log(`- parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
+        console.debug(`Rendering node: "${n.props.label}"`);
+        console.debug(`- parent: "${parent.props.label}"`);
+        console.debug(`- parentPosition: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
 
         const c = center;
         const y = center + r * Math.sin(φ);
