@@ -29,6 +29,9 @@ const MindMap = ({nodes, edges, ...attrs }) => {
   let slotNum = 0;
   let r = getCirlceRadius(circleNum);
 
+  /**
+   * Render children of a node
+   */
   const renderLevel = (node, nodesRenderedOnThisCircle=0) => {
     nodesRenderedOnThisCircle = 0;
 
@@ -46,10 +49,10 @@ const MindMap = ({nodes, edges, ...attrs }) => {
 
     const levelNodeElements = levelNodes
       .map((n, i) => {
-        console.log('0-slots:', slots);
-        console.log('stuff', slots[circleNum].filter(s => !s).length);
-        if (slots[circleNum].filter(s => !s).length === 0) {
-          console.log('here');
+        console.log('slots:', `[${slots.map(s => s.join(',')).join('\n  ')}\n]`);
+        const freeSlots = slots[circleNum].filter(s => !s);
+        if (freeSlots.length === 0) {
+          console.log('increasing circleNum, because there are no free slots left');
           circleNum++;
           slots[circleNum] = new Array(Math.floor(2 * 3.14 / shift)).fill(false);
           slotNum = 0;
