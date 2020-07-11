@@ -1,14 +1,8 @@
 import React from 'react';
-import nodeBackground from './node-background.svg';
+import { Node } from './Node';
+import { Edge } from './Edge';
 
-export const Edge = () => {};
-
-export const Node = ({x, y, label, ...attrs }) => (
-  <g {...attrs}>
-    <image href={nodeBackground} x={x - 10} y={y - 20} />
-    <text y={y} x={x}>{label}</text>
-  </g>
-);
+export { Node, Edge };
 
 const center = 0;
 
@@ -84,13 +78,14 @@ const MindMap = ({nodes, edges, ...attrs }) => {
         const y = center + r * Math.sin(φ);
         const x = center + r * Math.cos(φ)
         nodePositions.push({ id: n.props.id, x, y, φ });
-        mindMapNodes.push(<circle r={r} cx={center} cy={center} fill="none" stroke="#ddd" strokeWidth="1" strokeDasharray="4" />);
+        mindMapNodes.push(<circle r={r} cx={center} cy={center} key={n.id} fill="none" stroke="#ddd" strokeWidth="1" strokeDasharray="4" />);
         const path = <path d={`
             M ${parentPosition?.x || c} ${parentPosition?.y || c}
             L ${x} ${y}
           `}
           stroke={`rgb(${circleNum*50 % 255}, ${circleNum*100*3.14 % 255}, ${circleNum*150 % 255})`}
           strokeWidth="2" fill="none"
+          key={`${n.props.id}->${parent.props.id}`}
         />;
 
         console.debug(`- nodePositiong: "{${parentPosition?.x}, ${parentPosition?.y}}"`);
